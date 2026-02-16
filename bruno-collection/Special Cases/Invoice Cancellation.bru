@@ -1,0 +1,62 @@
+meta {
+  name: Invoice Cancellation
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{FORMANCE_URL}}/api/ledger/v2/{{LEDGER}}/transactions
+  body: json
+  auth: oauth2
+}
+
+auth:oauth2 {
+  grant_type: client_credentials
+  access_token_url: https://avlwqhalrewm-sqxe.eu.sandbox.formance.cloud/api/auth/oauth/token
+  refresh_token_url: 
+  client_id: 303e3b87-85d6-481e-aea1-c8e6784016a6
+  client_secret: b56e9ca4-35f7-4f94-b4ad-55c58dfd0e74
+  scope: 
+  credentials_placement: body
+  credentials_id: credentials
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: true
+  auto_refresh_token: false
+}
+
+body:json {
+  {
+  //   "script": {
+  //     "plain": "send [USD/2 10000] (\nsource = @liabilities:deferred_revenue:INV_001\ndestination = @invoices:INV_001:receivable\n)"
+  //   },
+    "postings": [
+      {
+        "source": "liabilities:deferred_revenue:INV_001",
+        "destination": "invoices:INV_001:receivable",
+        "amount": 10000,
+        "asset": "USD/2"
+      }
+    ],
+    "reference": "Invoice for order 001"
+  }
+  
+}
+
+body:text {
+  {
+    "script": {
+      "plain": "send [USD/2 10000] (
+    source = @user:john:wallet allowing unbounded overdraft
+    destination = @user:mary:wallet
+  )"
+    },
+    "reference": "payment-001"
+  }
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

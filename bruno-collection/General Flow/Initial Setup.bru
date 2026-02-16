@@ -1,0 +1,73 @@
+meta {
+  name: Initial Setup
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{FORMANCE_URL}}/api/ledger/v2/{{LEDGER}}//transactions
+  body: json
+  auth: oauth2
+}
+
+auth:oauth2 {
+  grant_type: client_credentials
+  access_token_url: https://avlwqhalrewm-sqxe.eu.sandbox.formance.cloud/api/auth/oauth/token
+  refresh_token_url: 
+  client_id: 303e3b87-85d6-481e-aea1-c8e6784016a6
+  client_secret: b56e9ca4-35f7-4f94-b4ad-55c58dfd0e74
+  scope: 
+  credentials_placement: body
+  credentials_id: credentials
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: true
+  auto_refresh_token: false
+}
+
+body:json {
+  // Setup initial example accounts with different payment methods
+  {
+    "script": {
+      "plain": "send [USD/2 10000] (\n  source = @world\n  destination = @customers:owen:gift_card\n)\n\nsend [USD/2 40000] (\n  source = @world\n  destination = @customers:owen:wallet\n)"
+    },
+    "reference": "Load-001"
+  }
+  
+  
+  // READABLE NUMSCRIPT
+  // send [USD/2 10000] (
+  //   source = @world
+  //   destination = @customers:owen:gift_card
+  // )
+  
+  // send [USD/2 40000] (
+  //   source = @world
+  //   destination = @customers:owen:wallet
+  // )
+  
+  
+  // POSTINGS EQUIVALENT
+  // {
+  //   "postings": [
+  //     {
+  //       "source": "world",
+  //       "destination": "customers:owen:gift_card",
+  //       "amount": 10000,
+  //       "asset": "USD/2"
+  //     },
+  //     {
+  //       "source": "world",
+  //       "destination": "customers:owen:wallet",
+  //       "amount": 40000,
+  //       "asset": "USD/2"
+  //     }
+  //   ],
+  //   "reference": "Load-001"
+  // }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

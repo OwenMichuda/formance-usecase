@@ -1,0 +1,97 @@
+meta {
+  name: Distribute Payout and Fees
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{FORMANCE_URL}}/api/ledger/v2/{{LEDGER}}/transactions
+  body: json
+  auth: oauth2
+}
+
+auth:oauth2 {
+  grant_type: client_credentials
+  access_token_url: https://avlwqhalrewm-sqxe.eu.sandbox.formance.cloud/api/auth/oauth/token
+  refresh_token_url: 
+  client_id: 303e3b87-85d6-481e-aea1-c8e6784016a6
+  client_secret: b56e9ca4-35f7-4f94-b4ad-55c58dfd0e74
+  scope: 
+  credentials_placement: body
+  credentials_id: credentials
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: true
+  auto_refresh_token: false
+}
+
+body:json {
+  {
+    "script": {
+      "vars": {
+        "settled": "invoices:INV_001:settled",
+        "vendor": "vendors:custom_couches:earnings"
+      },
+      "plain": "vars {\n  account $settled\n  account $vendor\n}\n\nsend [USD/2 *] (\n  source = $settled\n  destination = {\n    10% to @craftory:fees\n    7.25% to @craftory:taxes\n    remaining to $vendor\n  }\n)"
+    }
+  }
+  
+  
+  // READABLE NUMSCRIPT
+  // vars {
+  //   account $settled
+  //   account $vendor
+  // }
+  
+  // send [USD/2 *] (
+  //   source = $settled
+  //   destination = {
+  //     10% to @craftory:fees
+  //     7.25% to @craftory:taxes
+  //     remaining to $vendor
+  //   }
+  // )
+  
+  
+  // POSTINGS EQUIVALENT
+  // {
+  //   "postings": [
+  //     {
+  //       "source": "invoices:INV_001:settled",
+  //       "destination": "craftory:fees",
+  //       "amount": 5000,
+  //       "asset": "USD/2"
+  //     },
+  //     {
+  //       "source": "invoices:INV_001:settled",
+  //       "destination": "craftory:taxes",
+  //       "amount": 3625,
+  //       "asset": "USD/2"
+  //     },
+  //     {
+  //       "source": "invoices:INV_001:settled",
+  //       "destination": "vendors:custom_couches:earnings",
+  //       "amount": 10000,
+  //       "asset": "USD/2"
+  //     }
+  //   ]
+  // }
+}
+
+body:text {
+  {
+    "script": {
+      "plain": "send [USD/2 10000] (
+    source = @user:john:wallet allowing unbounded overdraft
+    destination = @user:mary:wallet
+  )"
+    },
+    "reference": "payment-001"
+  }
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
