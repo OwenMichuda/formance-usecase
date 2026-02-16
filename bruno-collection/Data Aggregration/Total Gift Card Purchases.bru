@@ -1,17 +1,18 @@
 meta {
-  name: All Pending Invoices (PIT)
+  name: Total Gift Card Purchases
   type: http
-  seq: 4
+  seq: 3
 }
 
 get {
-  url: {{FORMANCE_URL}}/api/ledger/v2/{{LEDGER}}/aggregate/balances?pit=2026-02-16T00:56:55.00Z
+  url: {{FORMANCE_URL}}/api/ledger/v2/{{LEDGER}}/volumes?groupBy=1
   body: json
   auth: oauth2
 }
 
 params:query {
-  pit: 2026-02-16T00:56:55.00Z
+  groupBy: 1
+  ~pit: 2026-02-16T02:13:10.439575Z
 }
 
 auth:oauth2 {
@@ -30,11 +31,15 @@ auth:oauth2 {
 }
 
 body:json {
+  // How much was spent using gift cards?
+  
   {
     "$match": {
-      "address": "invoices::pending"
+      "address": "customers::gift_card"
     }
   }
+  
+  
 }
 
 settings {

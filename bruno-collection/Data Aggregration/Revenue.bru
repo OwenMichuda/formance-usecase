@@ -1,0 +1,47 @@
+meta {
+  name: Revenue
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{FORMANCE_URL}}/api/ledger/v2/{{LEDGER}}/volumes?pit=2026-02-16T02:13:10.439575Z
+  body: json
+  auth: oauth2
+}
+
+params:query {
+  pit: 2026-02-16T02:13:10.439575Z
+}
+
+auth:oauth2 {
+  grant_type: client_credentials
+  access_token_url: https://avlwqhalrewm-sqxe.eu.sandbox.formance.cloud/api/auth/oauth/token
+  refresh_token_url: 
+  client_id: 303e3b87-85d6-481e-aea1-c8e6784016a6
+  client_secret: b56e9ca4-35f7-4f94-b4ad-55c58dfd0e74
+  scope: 
+  credentials_placement: body
+  credentials_id: credentials
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: true
+  auto_refresh_token: false
+}
+
+body:json {
+  // How much money did Craftory make in Q4?
+  // input(2025-12-31T23:59:59.999999Z) - input(2025-10-01T00:00:00.000000Z)
+  {
+    "$match": {
+      "address": "craftory:fees"
+    }
+  }
+  
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

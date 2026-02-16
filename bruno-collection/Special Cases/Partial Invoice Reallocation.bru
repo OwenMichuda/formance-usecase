@@ -1,7 +1,7 @@
 meta {
   name: Partial Invoice Reallocation
   type: http
-  seq: 5
+  seq: 4
 }
 
 post {
@@ -27,20 +27,19 @@ auth:oauth2 {
 
 body:json {
   {
-  //   "script": {
-  //     "plain": "send [USD/2 10000] (\nsource = @liabilities:deferred_revenue:INV_001\ndestination = @invoices:INV_001:receivable\n)"
-  //   },
-    "postings": [
-      {
-        "source": "liabilities:deferred_revenue:INV_001",
-        "destination": "invoices:INV_001:receivable",
-        "amount": 10000,
-        "asset": "USD/2"
-      }
-    ],
-    "reference": "Invoice for order 001"
+    "script": {
+      "plain": "send [USD/2 *] (\n  source = @invoices:INV_001:pending\n  destination = {\n    max [USD/2 20000] to @invoices:INV_002:pending\n    remaining to @customers:owen:wallet\n  }\n)"
+    }
   }
   
+  
+  // send [USD/2 *] (
+  //   source = @invoices:INV_001:pending
+  //   destination = {
+  //     max [USD/2 20000] to @invoices:INV_002:pending
+  //     remaining to @customers:owen:wallet
+  //   }
+  // )
 }
 
 body:text {

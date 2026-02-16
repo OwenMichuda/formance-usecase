@@ -27,20 +27,24 @@ auth:oauth2 {
 
 body:json {
   {
-  //   "script": {
-  //     "plain": "send [USD/2 10000] (\nsource = @liabilities:deferred_revenue:INV_001\ndestination = @invoices:INV_001:receivable\n)"
-  //   },
-    "postings": [
-      {
-        "source": "liabilities:deferred_revenue:INV_001",
-        "destination": "invoices:INV_001:receivable",
-        "amount": 10000,
-        "asset": "USD/2"
-      }
-    ],
-    "reference": "Invoice for order 001"
+    "script": {
+      "plain": "send [USD/2 50000] (\n  source = @craftory:refunds\n  destination = @customers:owen:wallet\n)\n\nsend [USD/2 50000] (\n  source = @vendors:custom_couches:earnings allowing unbounded overdraft\n  destination = @craftory:refunds\n)"
+    }
   }
   
+  
+  // send [USD/2 50000] (
+  //   source = @craftory:refunds
+  //   destination = @customers:owen:wallet
+  // )
+  
+  // send [USD/2 50000] (
+  //   source = @vendors:custom_couches:earnings allowing unbounded overdraft
+  //   destination = @craftory:refunds
+  // )
+  
+  
+  // Alternative solution: SAVE on vendor accounts when withdrawing earnings to ensure funds for refunds
 }
 
 body:text {

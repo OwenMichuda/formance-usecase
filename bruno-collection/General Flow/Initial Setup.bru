@@ -26,16 +26,14 @@ auth:oauth2 {
 }
 
 body:json {
-  // Setup initial example accounts with different payment methods
+  // Setup initial example accounts with different payment methods, fill refund pool
   {
     "script": {
-      "plain": "send [USD/2 10000] (\n  source = @world\n  destination = @customers:owen:gift_card\n)\n\nsend [USD/2 40000] (\n  source = @world\n  destination = @customers:owen:wallet\n)"
-    },
-    "reference": "Load-001"
+      "plain": "send [USD/2 10000] (\n  source = @world\n  destination = @customers:owen:gift_card\n)\n\nsend [USD/2 40000] (\n  source = @world\n  destination = @customers:owen:wallet\n)\n\nsend [USD/2 100000] (\n  source = @world\n  destination = @craftory:refunds\n)"
+    }
   }
   
   
-  // READABLE NUMSCRIPT
   // send [USD/2 10000] (
   //   source = @world
   //   destination = @customers:owen:gift_card
@@ -46,25 +44,10 @@ body:json {
   //   destination = @customers:owen:wallet
   // )
   
-  
-  // POSTINGS EQUIVALENT
-  // {
-  //   "postings": [
-  //     {
-  //       "source": "world",
-  //       "destination": "customers:owen:gift_card",
-  //       "amount": 10000,
-  //       "asset": "USD/2"
-  //     },
-  //     {
-  //       "source": "world",
-  //       "destination": "customers:owen:wallet",
-  //       "amount": 40000,
-  //       "asset": "USD/2"
-  //     }
-  //   ],
-  //   "reference": "Load-001"
-  // }
+  // send [USD/2 100000] (
+  //   source = @world
+  //   destination = @craftory:refunds
+  // )
 }
 
 settings {

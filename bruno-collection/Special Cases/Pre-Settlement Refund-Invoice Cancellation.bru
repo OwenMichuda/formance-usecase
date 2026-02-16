@@ -1,5 +1,5 @@
 meta {
-  name: Pre-Settlement Refund
+  name: Pre-Settlement Refund/Invoice Cancellation
   type: http
   seq: 1
 }
@@ -26,21 +26,19 @@ auth:oauth2 {
 }
 
 body:json {
+  // customer owen paid towards INV_001, and the invoice has not settled
+  
   {
-  //   "script": {
-  //     "plain": "send [USD/2 10000] (\nsource = @liabilities:deferred_revenue:INV_001\ndestination = @invoices:INV_001:receivable\n)"
-  //   },
-    "postings": [
-      {
-        "source": "liabilities:deferred_revenue:INV_001",
-        "destination": "invoices:INV_001:receivable",
-        "amount": 10000,
-        "asset": "USD/2"
-      }
-    ],
-    "reference": "Invoice for order 001"
+    "script": {
+      "plain": "send [USD/2 *] (\n  source = @invoices:INV_001:pending\n  destination = @customers:owen:wallet\n)"
+    }
   }
   
+  
+  // send [USD/2 *] (
+  //   source = @invoices:INV_001:pending
+  //   destination = @customers:owen:wallet
+  // )
 }
 
 body:text {
